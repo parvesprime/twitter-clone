@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ username }}'s Profile</title>
+
+    <style>
+        body {
+            background-color: #15202b;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        .container {
+            width: 600px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: #192734;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #1da1f2;
+        }
+
+        .tweet {
+            background: #22303c;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #1da1f2;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h2>{{ username }}</h2>
+        <p>Total posts: {{ post_count }}</p>
+        <p><a href="/home">← Back to Home</a></p>
+    </div>
+
+    {% for p in posts %}
+    <div class="tweet">
+        {{ p[1] }}
+    </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

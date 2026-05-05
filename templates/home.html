@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+
+    <style>
+        body {
+            background-color: #15202b;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        .container {
+            width: 600px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: #192734;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #1da1f2;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            background: #22303c;
+            color: white;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: none;
+            background: #1da1f2;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .tweet {
+            background: #192734;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .tweet-user {
+            color: #1da1f2;
+            font-weight: bold;
+        }
+
+        .delete {
+            float: right;
+            color: red;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a {
+            color: #1da1f2;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <form method="get" action="/home">
+    <input 
+        name="search"
+        placeholder="Search posts"
+        style="margin-bottom:10px;"
+    >
+</form>
+
+
+        <form method="post">
+            <input 
+    name="tweet" 
+    placeholder="What's happening?" 
+    maxlength="280"
+    required
+>
+<p style="font-size:12px;color:#8899a6;">
+    Max 280 characters
+</p>
+
+            <button>Post</button>
+        </form>
+    </div>
+    
+    {% for t in tweets %}
+    <div class="tweet">
+        <span class="tweet-user">
+        <a href="/profile/{{ t[1] }}">{{ t[1] }}</a>
+        </span>
+
+        <a class="delete" href="/delete/{{ t[0] }}">Delete</a>
+        <a style="margin-right:10px; float:right;" href="/edit/{{ t[0] }}">Edit</a>
+
+        <p>{{ t[2] }}</p>
+
+<div style="margin-top:8px;">
+    <a href="/like/{{ t[0] }}" style="color:#1da1f2; font-weight:bold;">
+        ❤️ Like ({{ t[3] }})
+    </a>
+</div>
+<!-- Comments -->
+<div style="margin-top:10px; font-size:14px;">
+
+    <!-- Top-level comments -->
+    {% for c in comments %}
+        {% if c[1] == t[0] and c[2] == None %}
+            <div style="margin-bottom:6px;">
+                <strong>{{ c[3] }}</strong>: {{ c[4] }}
+
+                <!-- Reply form -->
+                <form method="post" action="/comment/{{ t[0] }}" style="margin-left:20px;">
+                    <input type="hidden" name="parent_id" value="{{ c[0] }}">
+                    <input 
+                        name="comment"
+                        placeholder="Reply..."
+                        style="margin-top:4px; width:90%;"
+                        required
+                    >
+                </form>
+
+                <!-- Replies -->
+                {% for r in comments %}
+                    {% if r[2] == c[0] %}
+                        <div style="margin-left:30px; color:#8899a6;">
+                            <strong>{{ r[3] }}</strong>: {{ r[4] }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Add new top-level comment -->
+<form method="post" action="/comment/{{ t[0] }}">
+    <input 
+        name="comment"
+        placeholder="Add a comment..."
+        style="margin-top:6px;"
+        required
+    >
+</form>
+
+
+
+    </div>
+    {% endfor %}
+
+    <p><a href="/logout">Logout</a></p>
+
+</div>
+
+</body>
+</html>
